@@ -47,10 +47,11 @@ class Directory {
     })
   }
 
-  static read(dirname) {
+  static read(dirname, exclude=[]) {
     const directory = new Directory(dirname)
     const files = fs.readdirSync(dirname)
     files.forEach((filename) => {
+      if (exclude.includes(filename)) return
       const path = dirname + '\\' + filename
       if (!filename.includes('.')) {
         const subDirectory = Directory.read(path)
