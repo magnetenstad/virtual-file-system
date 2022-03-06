@@ -54,7 +54,7 @@ class Directory {
       if (exclude.includes(filename)) return
       const path = dirname + '\\' + filename
       if (!filename.includes('.')) {
-        const subDirectory = Directory.read(path)
+        const subDirectory = Directory.read(path, exclude)
         subDirectory.name = filename
         directory.directories.push(subDirectory)
       } else {
