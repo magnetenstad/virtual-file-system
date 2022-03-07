@@ -14,13 +14,12 @@ class File {
   }
 
   static read(path, name=path) {
-    if (fs.existsSync(path)) {
-      const data = fs.readFileSync(path, 'utf8')
-      return new File(name, data)
-    } else {
-      console.warn(`[WARNING] Could not read file ${name}`)
+    if (!fs.existsSync(path)) {
+      console.warn(`[WARNING] Could not read file ${path}`)
       return null
     }
+    const data = fs.readFileSync(path, 'utf8')
+    return new File(name, data)
   }
 
   toString() {
@@ -48,19 +47,23 @@ class Directory {
   }
 
   static read(dirname, exclude=[]) {
+    if (!fs.existsSync(dirname)) {
+      console.warn(`[WARNING] Could not read file ${dirname}`)
+      return null
+    }
     const directory = new Directory(dirname)
     const files = fs.readdirSync(dirname)
     files.forEach((filename) => {
       if (exclude.includes(filename)) return
       const path = dirname + '\\' + filename
-      if (!filename.includes('.')) {
-        const subDirectory = Directory.read(path, exclude)
-        subDirectory.name = filename
-        directory.directories.push(subDirectory)
-      } else {
+      if (filename.includes('.')) {
         const file = File.read(path)
         file.name = filename
         directory.files.push(file)
+      } else {
+        const subDirectory = Directory.read(path, exclude)
+        subDirectory.name = filename
+        directory.directories.push(subDirectory)
       }
     })
     return directory
