@@ -37,9 +37,9 @@ class Directory {
   }
 
   write(location=this.location) {
-    const path = location + '\\' + this.name
-    fs.rmdir(path, () => {})
-    fs.mkdir(path, () => {})
+    const path = (location ? location + '\\' : '') + this.name
+    fs.rmSync(path, { recursive: true, force: true })
+    fs.mkdir(path, (err) => {if (err) console.warn(err)})
     this.files.forEach((file) => {
       file.write(path)
     })
