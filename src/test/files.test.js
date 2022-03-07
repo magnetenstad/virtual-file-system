@@ -4,9 +4,9 @@ import fs from 'fs'
 describe('File', () => {
   beforeAll(() => {
     fs.mkdirSync('src/test/assets')
-    fs.mkdirSync('src/test/assets/folder')
+    fs.mkdirSync('src/test/assets/texts')
     fs.writeFileSync('src/test/assets/markdown.md', '# A basic markdown file')
-    fs.writeFileSync('src/test/assets/folder/text.txt', 'text')
+    fs.writeFileSync('src/test/assets/texts/text.txt', 'text')
   });
 
   afterAll(() => {
@@ -43,9 +43,9 @@ describe('File', () => {
 describe('Directory', () => {
   beforeAll(() => {
     fs.mkdirSync('src/test/assets')
-    fs.mkdirSync('src/test/assets/folder')
+    fs.mkdirSync('src/test/assets/texts')
     fs.writeFileSync('src/test/assets/markdown.md', '# A basic markdown file')
-    fs.writeFileSync('src/test/assets/folder/text.txt', 'text')
+    fs.writeFileSync('src/test/assets/texts/text.txt', 'text')
   });
 
   afterAll(() => {
@@ -63,7 +63,7 @@ describe('Directory', () => {
     expect(directory.files).toEqual(
         [new File('markdown.md', '# A basic markdown file')])
     expect(directory.directories.length).toBe(1)
-    expect(directory.directories[0].name).toBe('folder')
+    expect(directory.directories[0].name).toBe('texts')
     expect(directory.directories[0].files.length).toBe(1)
     expect(directory.directories[0].directories.length).toBe(0)
     expect(directory.directories[0].files[0])
@@ -83,8 +83,8 @@ describe('Directory', () => {
     const directory = Directory.read('src/test/assets')
     directory.name = 'src/test/assets/renamed'
     directory.write()
-    const file = File.read('src/test/assets/folder/text.txt')
-    const renamed = File.read('src/test/assets/renamed/folder/text.txt')
+    const file = File.read('src/test/assets/texts/text.txt')
+    const renamed = File.read('src/test/assets/renamed/texts/text.txt')
     expect(renamed.data).toBe(file.data)
   })
 })

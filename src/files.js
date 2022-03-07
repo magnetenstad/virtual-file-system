@@ -9,7 +9,7 @@ class File {
   }
 
   write(path='') {
-    path += path === '' ? this.name : '//' + this.name
+    path += path === '' ? this.name : '\\' + this.name
     fs.writeFileSync(path, this.data)
   }
 
@@ -35,7 +35,7 @@ class Directory {
   }
 
   write(path='') {
-    path += path === '' ? this.name : '//' + this.name
+    path += path === '' ? this.name : '\\' + this.name
     fs.rmdir(path, () => {})
     fs.mkdir(path, () => {})
     this.files.forEach((file) => {
@@ -48,7 +48,7 @@ class Directory {
 
   static read(dirname, exclude=[]) {
     if (!fs.existsSync(dirname)) {
-      console.warn(`[WARNING] Could not read file ${dirname}`)
+      console.warn(`[WARNING] Could not read directory ${dirname}`)
       return null
     }
     const directory = new Directory(dirname)
