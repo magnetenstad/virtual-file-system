@@ -3,23 +3,24 @@ import fs from 'fs';
 export { File, Directory }
 
 class File {
-  constructor(name, data) {
+  constructor(name, data, location='') {
     this.name = name
     this.data = data
+    this.location = location
   }
 
-  write(path='') {
-    path += path === '' ? this.name : '\\' + this.name
-    fs.writeFileSync(path, this.data)
+  write(location=this.location) {
+    fs.writeFileSync(location + '\\' + this.name, this.data)
   }
 
-  static read(path, name=path) {
+  static read(path) {
     if (!fs.existsSync(path)) {
       console.warn(`[WARNING] Could not read file ${path}`)
       return null
     }
     const data = fs.readFileSync(path, 'utf8')
-    return new File(name, data)
+    const [name, location] = splitPath(path)
+    return new File(name, data, location)
   }
 
   toString() {
@@ -28,14 +29,16 @@ class File {
 }
 
 class Directory {
-  constructor(name) {
+  constructor(name, location='') {
     this.name = name
+    this.location = location
     this.files = []
     this.directories = []
   }
 
-  write(path='') {
-    path += path === '' ? this.name : '\\' + this.name
+  write(location=this.location) {
+    const path = location + '\\' + this.name
+    console.log(path);
     fs.rmdir(path, () => {})
     fs.mkdir(path, () => {})
     this.files.forEach((file) => {
@@ -46,24 +49,24 @@ class Directory {
     })
   }
 
-  static read(dirname, exclude=[]) {
-    if (!fs.existsSync(dirname)) {
-      console.warn(`[WARNING] Could not read directory ${dirname}`)
+  static read(path, exclude=[]) {
+    if (!fs.existsSync(path)) {
+      console.warn(`[WARNING] Could not read directory ${path}`)
       return null
     }
-    const directory = new Directory(dirname)
-    const files = fs.readdirSync(dirname)
+    const [name, location] = splitPath(path)
+    const directory = new Directory(name, location)
+    const files = fs.readdirSync(path)
     files.forEach((filename) => {
       if (exclude.includes(filename)) return
-      const path = dirname + '\\' + filename
-      if (filename.includes('.')) {
-        const file = File.read(path)
+      const subPath = path + '\\' + filename
+      if (isDirectoryPath(subPath)) {
+        const subDirectory = Directory.read(subPath, exclude)
+        directory.directories.push(subDirectory)
+      } else {
+        const file = File.read(subPath)
         file.name = filename
         directory.files.push(file)
-      } else {
-        const subDirectory = Directory.read(path, exclude)
-        subDirectory.name = filename
-        directory.directories.push(subDirectory)
       }
     })
     return directory
@@ -96,4 +99,19 @@ class Directory {
     string = string.replaceAll('\n', '\n\t')
     return `${string}\n}`
   }
+}
+
+function splitPath(path) {
+  const split = path.split('\\').filter((e) => e !== '')
+  let name = ''
+  while (name === '') {
+    name = split.pop()
+  }
+  const location = split.join('\\') + '\\'
+  return [name, location]
+}
+
+function isDirectoryPath(path) {
+  const [name] = splitPath(path)
+  return path.endsWith('//') || !name.includes('.')
 }
