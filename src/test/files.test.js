@@ -40,6 +40,16 @@ describe('File', () => {
     const renamed = File.read('src\\test\\assets\\renamed.md')
     expect(renamed.data).toBe(file.data)
   })
+
+  it('Can read and write images', () => {
+    // This does not actually guarantee that images work
+    const file = File.read('src\\test\\gull.jpg')
+    file.name = 'gull2.jpg'
+    file.location += '\\assets\\'
+    file.write()
+    const file2 = File.read('src\\test\\assets\\gull2.jpg')
+    expect(file.data).toEqual(file2.data)
+  })
 })
 
 describe('Directory', () => {

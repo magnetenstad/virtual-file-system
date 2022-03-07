@@ -18,8 +18,8 @@ class File {
       console.warn(`[WARNING] Could not read file ${path}`)
       return null
     }
-    const data = fs.readFileSync(path, 'utf8')
-    const [name, location] = splitPath(path)
+    const [name, location, extension] = splitPath(path)
+    const data = fs.readFileSync(path, getEncoding(extension))
     return new File(name, data, location)
   }
 
@@ -107,10 +107,26 @@ function splitPath(path) {
     name = split.pop()
   }
   const location = split.join('\\') + '\\'
-  return [name, location]
+  const extension = name.includes('.') 
+    ? name.substring(name.lastIndexOf('.') + 1).toLowerCase()
+    : ''
+  return [name, location, extension]
 }
 
 function isDirectoryPath(path) {
   const [name] = splitPath(path)
   return path.endsWith('//') || !name.includes('.')
+}
+
+function getEncoding(extension) {
+  switch (extension) {
+    case 'png':
+      return ''
+    case 'jpg':
+      return ''
+    case 'jpeg':
+      return ''
+    default:
+      return 'utf-8'
+  }
 }
