@@ -10,7 +10,8 @@ class File {
   }
 
   write(location=this.location) {
-    fs.writeFileSync(location + '\\' + this.name, this.data)
+    const path = (location ? location + '\\' : '') + this.name
+    fs.writeFileSync(path, this.data)
   }
 
   static read(path) {
