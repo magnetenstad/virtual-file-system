@@ -38,7 +38,6 @@ class Directory {
 
   write(location=this.location) {
     const path = location + '\\' + this.name
-    console.log(path);
     fs.rmdir(path, () => {})
     fs.mkdir(path, () => {})
     this.files.forEach((file) => {
