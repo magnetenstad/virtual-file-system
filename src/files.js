@@ -37,6 +37,10 @@ class Directory {
     this.directories = []
   }
 
+  /**
+   * Overwrites existing folder.
+   * @param {string} location 
+   */
   write(location=this.location) {
     const path = (location ? location + '\\' : '') + this.name
     fs.rmSync(path, { recursive: true, force: true })
@@ -46,6 +50,15 @@ class Directory {
     })
     this.directories.forEach((directory) => {
       directory.write(path)
+    })
+  }
+
+  writeContents(location=this.location) {
+    this.files.forEach((file) => {
+      file.write(location)
+    })
+    this.directories.forEach((directory) => {
+      directory.write(location)
     })
   }
 
@@ -70,6 +83,15 @@ class Directory {
       }
     })
     return directory
+  }
+
+  getDirectories(name) {
+    return this.directories.filter((dir) => dir.name.match(name))
+  }
+
+  getDirectory(name) {
+    const files = this.getDirectories(name)
+    return files.length ? files[0] : null
   }
 
   getFiles(name) {

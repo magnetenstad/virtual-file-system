@@ -2,7 +2,7 @@ import { File, Directory } from '..\\files.js'
 import fs from 'fs'
 
 describe('File', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     fs.mkdirSync('src\\test\\assets\\')
     fs.mkdirSync('src\\test\\assets\\texts\\')
     fs.writeFileSync('src\\test\\assets\\markdown.md',
@@ -10,7 +10,7 @@ describe('File', () => {
     fs.writeFileSync('src\\test\\assets\\texts\\text.txt', 'text')
   });
 
-  afterAll(() => {
+  afterEach(() => {
     fs.rmSync('src\\test\\assets', { recursive: true, force: true })
   });
 
@@ -53,14 +53,15 @@ describe('File', () => {
 })
 
 describe('Directory', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     fs.mkdirSync('src\\test\\assets')
     fs.mkdirSync('src\\test\\assets\\texts')
-    fs.writeFileSync('src\\test\\assets\\markdown.md', '# A basic markdown file')
+    fs.writeFileSync('src\\test\\assets\\markdown.md',
+        '# A basic markdown file')
     fs.writeFileSync('src\\test\\assets\\texts\\text.txt', 'text')
   });
 
-  afterAll(() => {
+  afterEach(() => {
     fs.rmSync('src\\test\\assets', { recursive: true, force: true })
   });
 
@@ -101,5 +102,13 @@ describe('Directory', () => {
     const file = File.read('src\\test\\assets\\texts\\text.txt')
     const renamed = File.read('src\\test\\assets\\renamed\\texts\\text.txt')
     expect(renamed.data).toBe(file.data)
+  })
+
+  it('Can write contents', () => {
+    const directory = Directory.read('src\\test\\assets\\')
+    directory.writeContents('src\\test\\assets\\texts\\')
+    const subDirectory = Directory.read('src\\test\\assets\\texts\\texts\\')
+    expect(directory.getDirectory('texts').getFile('text.txt').data)
+        .toBe(subDirectory.getFile('text.txt').data)
   })
 })
