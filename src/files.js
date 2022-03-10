@@ -6,6 +6,7 @@ class File {
   constructor(name, data, location='') {
     this.name = name
     this.data = data
+    this.metadata = {}
     this.location = location
   }
 
