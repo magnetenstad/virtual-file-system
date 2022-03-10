@@ -149,6 +149,8 @@ function getEncoding(extension) {
       return ''
     case 'jpeg':
       return ''
+    case 'ico':
+      return ''
     default:
       return 'utf-8'
   }
