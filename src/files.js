@@ -11,7 +11,8 @@ class File {
   }
 
   write(location=this.location) {
-    const path = (location ? location + '\\' : '') + this.name
+    const path = ((location ? location + '\\' : '') + this.name)
+        .replace('\\\\', '\\').trimStart('\\')
     fs.writeFileSync(path, this.data)
   }
 
@@ -43,7 +44,8 @@ class Directory {
    * @param {string} location 
    */
   write(location=this.location) {
-    const path = (location ? location + '\\' : '') + this.name
+    const path = ((location ? location + '\\' : '') + this.name)
+        .replace('\\\\', '\\').trimStart('\\')
     fs.rmSync(path, { recursive: true, force: true })
     fs.mkdir(path, (err) => {if (err) console.warn(err)})
     this.files.forEach((file) => {
