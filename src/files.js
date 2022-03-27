@@ -112,6 +112,15 @@ class Directory {
       this.files.splice(index, 1)
     }
   }
+
+  apply(func) {
+    this.files.forEach((file) => {
+      func(file)
+    })
+    this.directories.forEach((directory) => {
+      directory.apply(func)
+    })
+  }
   
   toString() {
     let string = `${this.name} {`

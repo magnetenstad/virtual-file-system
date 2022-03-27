@@ -111,4 +111,14 @@ describe('Directory', () => {
     expect(directory.getDirectory('texts').getFile('text.txt').data)
         .toBe(subDirectory.getFile('text.txt').data)
   })
+
+  it('Can apply functions', () => {
+    const directory = Directory.read('src\\test\\assets\\')
+    directory.apply((file) => {
+      file.name += '1'
+      file.data += '1'
+    })
+    const file = directory.getFile('markdown.md1')
+    expect(file.data).toBe('# A basic markdown file1')
+  })
 })
