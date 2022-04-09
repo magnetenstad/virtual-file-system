@@ -112,6 +112,18 @@ describe('Directory', () => {
         .toBe(subDirectory.getFile('text.txt').data)
   })
 
+  it('Can get directories and files', () => {
+    const directory = Directory.read('src\\test\\assets\\')
+    const subDirectory = directory.getDirectory('texts')
+    const text = subDirectory.getFile('text.txt')
+    expect(text.name).toBe('text.txt')
+    expect(text.data).toBe('text')
+    const textB = subDirectory.getFile(/ext.txt/)
+    expect(text).toBe(textB)
+    const textNull = subDirectory.getFile(/\bext.txt\b/)
+    expect(textNull).toBe(null)
+  })
+
   it('Can apply functions', () => {
     const directory = Directory.read('src\\test\\assets\\')
     directory.apply((file) => {
