@@ -47,7 +47,7 @@ class Directory {
     const path = ((location ? location + '\\' : '') + this.name)
         .replace('\\\\', '\\').trimStart('\\')
     fs.rmSync(path, { recursive: true, force: true })
-    fs.mkdir(path, (err) => {if (err) console.warn(err)})
+    fs.mkdirSync(path, (err) => {if (err) console.warn(err)})
     this.files.forEach((file) => {
       file.write(path)
     })
