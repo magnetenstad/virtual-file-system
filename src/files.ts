@@ -5,7 +5,7 @@ export { File, Directory };
 class File {
   name: string;
   data: string;
-  metadata: object = {};
+  metadata: any = {};
   location: string;
 
   constructor(name: string, data: string, options?: { location?: string }) {
