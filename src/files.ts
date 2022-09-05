@@ -15,13 +15,8 @@ class File {
   }
 
   write(location = this.location) {
-    location = location.replaceAll('\\\\', '\\');
     const path =
-      (location.length > 0
-        ? location.endsWith('\\')
-          ? location
-          : location + '\\'
-        : '') + this.name;
+      (location.endsWith('\\') ? location : location + '\\') + this.name;
     fs.writeFileSync(path, this.data, {
       encoding: getEncoding(this.getExtension()),
     });
@@ -69,10 +64,8 @@ class Directory {
    * @param {string} location
    */
   write(location: string = this.location) {
-    const path = ((location ? location + '\\' : '') + this.name).replaceAll(
-      '\\\\',
-      '\\'
-    );
+    const path =
+      (location.endsWith('\\') ? location : location + '\\') + this.name;
     fs.rmSync(path, { recursive: true, force: true });
     fs.mkdirSync(path);
     this.files.forEach((file) => {
@@ -185,7 +178,7 @@ function splitPath(path: string) {
     throw new Error('Cannot split empty path!');
   }
   let name = split.pop()!;
-  const location = split.join('\\') + '\\';
+  const location = split.join('\\') + (split.length > 0 ? '\\' : '');
   const extension = name.includes('.')
     ? name.substring(name.lastIndexOf('.') + 1).toLowerCase()
     : '';
