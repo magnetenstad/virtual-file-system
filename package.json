@@ -1,6 +1,6 @@
 {
   "name": "virtual-file-system",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,7 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "test": "npx jest"
+    "test": "tsc && npx jest"
   },
   "repository": {
     "type": "git",

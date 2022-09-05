@@ -155,9 +155,12 @@ class Directory {
   }
 
   filter(func: (f: File) => boolean) {
-    this.files.forEach((file) => {
-      if (!func(file)) this.removeFile(file);
-    });
+    for (let i = 0; i < this.files.length; i++) {
+      if (!func(this.files[i])) {
+        this.files.splice(i--, 1);
+      }
+    }
+
     this.directories.forEach((directory) => {
       directory.filter(func);
     });

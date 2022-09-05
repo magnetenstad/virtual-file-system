@@ -175,4 +175,17 @@ describe('Directory', () => {
     if (file == null) return;
     expect(file.data).toBe('# A basic markdown file1');
   });
+
+  it('Can be filtered', () => {
+    const directory = Directory.read('test\\temp\\');
+    expect(directory).not.toBe(null);
+    if (directory == null) return;
+    const fileBefore = directory.getFile('markdown.md');
+    expect(fileBefore).not.toBe(null);
+    directory.filter((file) => {
+      return file.name.match('markdown') == null;
+    });
+    const fileAfter = directory.getFile('markdown.md');
+    expect(fileAfter).toBe(null);
+  });
 });
