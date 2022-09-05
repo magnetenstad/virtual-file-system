@@ -1,3 +1,3 @@
-import { File, Directory } from './files.js';
+import { File, Directory } from './files';
 
 export { File, Directory };

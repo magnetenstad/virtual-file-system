@@ -92,7 +92,10 @@ class Directory {
     });
   }
 
-  static read(path: string, exclude: string[] = []): Directory | null {
+  static read(
+    path: string,
+    exclude: (RegExp | string)[] = []
+  ): Directory | null {
     if (!fs.existsSync(path)) {
       console.warn(`[WARNING] Could not read directory ${path}`);
       return null;
@@ -101,7 +104,7 @@ class Directory {
     const directory = new Directory(name, location);
     const files = fs.readdirSync(path);
     files.forEach((filename) => {
-      if (exclude.includes(filename)) return;
+      if (exclude.some((name) => filename.match(name))) return;
       const subPath = path + '\\' + filename;
       if (isDirectoryPath(subPath)) {
         const subDirectory = Directory.read(subPath, exclude);
