@@ -154,6 +154,15 @@ class Directory {
     });
   }
 
+  filter(func: (f: File) => boolean) {
+    this.files.forEach((file) => {
+      if (!func(file)) this.removeFile(file);
+    });
+    this.directories.forEach((directory) => {
+      directory.filter(func);
+    });
+  }
+
   toString() {
     let result = `${this.name} {`;
     this.files.forEach((file) => {
