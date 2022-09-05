@@ -15,8 +15,7 @@ class File {
   }
 
   write(location = this.location) {
-    const path =
-      (location.endsWith('\\') ? location : location + '\\') + this.name;
+    const path = mergePath(location, this.name);
     fs.writeFileSync(path, this.data, {
       encoding: getEncoding(this.getExtension()),
     });
@@ -64,8 +63,7 @@ class Directory {
    * @param {string} location
    */
   write(location: string = this.location) {
-    const path =
-      (location.endsWith('\\') ? location : location + '\\') + this.name;
+    const path = mergePath(location, this.name);
     fs.rmSync(path, { recursive: true, force: true });
     fs.mkdirSync(path);
     this.files.forEach((file) => {
@@ -205,4 +203,12 @@ function getEncoding(extension: string) {
     default:
       return 'utf-8';
   }
+}
+
+function mergePath(location: string, name: string) {
+  return (
+    (location.length == 0 || location.endsWith('\\')
+      ? location
+      : location + '\\') + name
+  );
 }
