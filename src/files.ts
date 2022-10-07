@@ -97,11 +97,12 @@ class Directory {
     files.forEach((filename) => {
       if (exclude.some((name) => filename.match(name))) return;
       const subPath = path + '\\' + filename;
-      if (isDirectoryPath(subPath)) {
+      const stats = fs.lstatSync(subPath);
+      if (stats.isDirectory()) {
         const subDirectory = Directory.read(subPath, exclude);
         if (!subDirectory) return;
         directory.directories.push(subDirectory);
-      } else {
+      } else if (stats.isFile()) {
         const file = File.read(subPath);
         if (!file) return;
         file.name = filename;
@@ -181,11 +182,6 @@ function splitPath(path: string) {
     ? name.substring(name.lastIndexOf('.') + 1).toLowerCase()
     : '';
   return { name, location, extension };
-}
-
-function isDirectoryPath(path: string) {
-  const { name } = splitPath(path);
-  return path.endsWith('//') || !name.includes('.');
 }
 
 function getEncoding(extension: string) {
