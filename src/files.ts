@@ -40,6 +40,10 @@ class File {
     return this.name.substring(0, this.name.length - extension.length);
   }
 
+  getPath() {
+    return mergePath(this.location, this.name);
+  }
+
   toString() {
     return `${this.name}`;
   }

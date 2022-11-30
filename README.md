@@ -26,6 +26,7 @@ declare class File {
   static read(path: string): File | null;
   getExtension(): string;
   getNameWithoutExtension(): string;
+  getPath(): string;
   toString(): string;
 }
 declare class Directory {
@@ -40,13 +41,14 @@ declare class Directory {
    */
   write(location?: string): void;
   writeContents(location?: string): void;
-  static read(path: string, exclude?: string[]): Directory | null;
+  static read(path: string, exclude?: (RegExp | string)[]): Directory | null;
   getDirectories(name: string): Directory[];
   getDirectory(name: string): Directory | null;
   getFiles(name: RegExp | string): File[];
   getFile(name: RegExp | string): File | null;
   removeFile(file: File): void;
   apply(func: (f: File) => void): void;
+  filter(func: (f: File) => boolean): void;
   toString(): string;
 }
 ```
