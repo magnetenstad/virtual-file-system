@@ -1,10 +1,23 @@
 # virtual-file-system
 
-npm package for virtual file systems (directories, files)
+npm package for virtual file directories. Wraps the [Node.js fs API](https://nodejs.org/api/fs.html). Meant to simplify reading of entire directories and manipulation of file contents.
 
 ```sh
 npm i virtual-file-system
 ```
+
+## Example use case
+
+```ts
+const dir = Directory.read('example/') // read dir into memory
+dir.filter((file) => file.name.getExtension() == 'md') // manipulate
+dir.apply((file) => file.content += '\n Author: Me')
+dir.write('dist') // write back to disk
+```
+
+See `test/files.test.ts` for more examples.
+
+## API
 
 Exports classes `File` and `Directory`
 
